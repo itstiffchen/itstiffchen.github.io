@@ -1,6 +1,10 @@
 ## Welcome to Tiffany Chen's site
 
-[Link](https://github.com/itstiffchen/sta141proj) 
+# Introduction
+My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a degree in Applied Statistics with emphasis in Managerial Economics. 
+
+[STA 141B final project](https://github.com/itstiffchen/sta141proj) 
+[Linkedin](https://linkedin.com/in/tiffchenn) 
 
 ### Jekyll Themes
 
