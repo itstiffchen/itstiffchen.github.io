@@ -6,7 +6,7 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 ###  Projects
 [STA 141B Final Project](https://github.com/itstiffchen/sta141proj)
 
-[STA 141B Assignment 1](https://github.com/itstiffchen/itstiffchen.github.io/assignment1.html)
+[STA 141B Assignment 1](https://github.com/itstiffchen/itstiffchen.github.io/assignment1.ipynb)
 
 ###  Linkedin
 [Linkedin](https://linkedin.com/in/tiffchenn)
