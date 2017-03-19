@@ -1,7 +1,7 @@
 ## Welcome to Tiffany Chen's site
 
 ### Introduction
-<img src="images/tiff.png">
+<img src="images/tiff.jpg">
 
 My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a degree in Applied Statistics with emphasis in Managerial Economics. I am interested in careers relating to the cross between data and business. I'm interested in data visualizations and the story telling part of data sceince. My hobbies include everything outdoors - hiking, camping, swimming, and simply being in nature, photography, and creative outlets like Youtube and fashion.
 
@@ -9,7 +9,7 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 ###  Projects
 <ul>
 <b>STA141B: Data & Web Technologies for Data Analysis</b>
-<li><a href="assignments/assignment1.html" title=assignment 1</a></li>
+<li><a> href="assignments/assignment1.html" title=assignment 1</a></li>
 
 </ul>
 
