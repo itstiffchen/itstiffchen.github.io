@@ -1,7 +1,4 @@
-## Welcome to Tiffany Chen's site
-
-
-### Welcome
+## Welcome
 
 ### Introduction
 <img src="images/tiff.jpg">
