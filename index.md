@@ -8,7 +8,7 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 
 ###  Projects
 <ul>
-<b>STA141B: Data & Web Technologies for Data Analysis</b>
+<b>STA141B: Data  Web Technologies for Data Analysis</b>
 <li><a> href="assignments/assignment1.html" title=assignment 1</a></li>
 
 </ul>
