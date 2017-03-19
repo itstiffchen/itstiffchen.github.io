@@ -16,5 +16,5 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 
 ###  Contact
 [Linkedin](https://linkedin.com/in/tiffchenn)
-Email: tyychen@ucdavis.edu
+<a href="mailto:tyychen@ucdavis.edu">Email</a>
 
