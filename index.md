@@ -11,14 +11,14 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 
 
 ###  Projects
-<a href="assignments/assignment1.html">assignment 1</a>
-[STA 141B Final Project](https://github.com/itstiffchen/sta141proj)
+<a href="assignments/assignment1.html">assignment 1</a> <br>
+[STA 141B Final Project](https://github.com/itstiffchen/sta141proj) <br>
 [STA 141B Assignment 1](https://github.com/itstiffchen/itstiffchen.github.io/blob/master/assignment1.ipynb)
 
 
 ###  Contact
 
-[Linkedin](https://linkedin.com/in/tiffchenn)
-<a href="mailto:tyychen@ucdavis.edu">Email</a>
+[Linkedin](https://linkedin.com/in/tiffchenn) <br>
+<a href="mailto:tyychen@ucdavis.edu">Email</a> <br>
 [Instagram](https://www.instagram.com/tiffnychen)
 
