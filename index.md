@@ -8,7 +8,7 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 
 ###  Projects
 <p>
-<a href="assignments/assignment1.html">assignment 1</a> <br>
+<a href="assignments/STA141+Project.html"> STA 141B Project!!</a> <br>
 </p>
 
 ###  Contact
