@@ -17,5 +17,4 @@ Hey, I'm a senior at UC Davis graduating in March 2017 with a degree in Applied 
 <p>
 <a href = "https://linkedin.com/in/tiffchenn">Linkedin</a> <br>
 <a href="mailto:tyychen@ucdavis.edu">Email</a> <br>
-<a href ="https://www.instagram.com/tiffnychen">Instagram</a>
 </p>
