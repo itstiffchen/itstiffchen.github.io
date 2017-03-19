@@ -9,7 +9,7 @@ My name is Tiffany and I'm a senior at UC Davis graduating in March 2017 with a 
 [STA 141B Final Project](https://github.com/itstiffchen/sta141proj)
 <ul>
 <b>STA141B: Data & Web Technologies for Data Analysis</b>
-<li><a href="assignment1.html" title="assignment 1"</a></li>
+<a href="assignments/assignment1.html" title="assignment 1"</a>
 </ul>
 
 [STA 141B Assignment 1](https://github.com/itstiffchen/itstiffchen.github.io/blob/master/assignment1.ipynb)
