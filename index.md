@@ -8,7 +8,6 @@ Hey! I'm a senior at UC Davis graduating in March 2017 with a degree in Applied 
 
 ###  Projects
 <p>
-<a href="assignments/STA141+Project.html"> STA 141B Project!! </a> in collaboration with my good friend <a href="https://uuleong.github.io/">Un</a> <br>
 <a href="assignments/a1.html"> Assignment 1  </a> <br>
 
 </p>
