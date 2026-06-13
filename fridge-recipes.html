@@ -31,15 +31,19 @@
     .primary { background: #4f46e5; color: white; }
     .secondary { background: #eef2ff; color: #4338ca; }
     .text { background: white; color: #475569; box-shadow: inset 0 0 0 1px #e2e8f0; }
-    .results { margin-top: 28px; }
-    .card { background: white; border-radius: 22px; border: 1px solid #e2e8f0; padding: 20px; margin-bottom: 18px; }
-    .card h2 { margin: 0 0 8px; font-size: 1.2rem; }
-    .card p { margin: 0 0 12px; line-height: 1.6; color: #475569; }
-    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
-    .chip { padding: 8px 12px; border-radius: 999px; background: #eef2ff; color: #3730a3; font-size: 0.9rem; }
+    .results { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: white; border-radius: 22px; border: 1px solid #e2e8f0; padding: 0; margin-bottom: 0; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12); }
+    .card-image { width: 100%; height: 200px; object-fit: cover; background: linear-gradient(135deg, #eef2ff 0%, #f0f7ff 100%); }
+    .card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .card h2 { margin: 0 0 8px; font-size: 1.1rem; }
+    .card p { margin: 0 0 12px; line-height: 1.6; color: #475569; font-size: 0.95rem; }
+    .heading-card { grid-column: 1 / -1; }
+    .heading-card h2 { margin: 0 0 8px; font-size: 1.3rem; }
+    .heading-card p { margin: 0; color: #667085; }
     .note { margin-top: 4px; font-size: 0.95rem; color: #64748b; }
-    .preview { margin-top: 16px; display: grid; gap: 12px; }
-    .preview img { width: 100%; max-height: 360px; object-fit: contain; border-radius: 18px; border: 1px solid #cbd5e1; }
+    .preview { margin-top: 24px; display: grid; gap: 12px; }
+    .preview img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 20px; border: 2px solid #e2e8f0; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12); }
     .footer { margin-top: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: #667085; font-size: 0.95rem; }
     .accent { color: #4338ca; font-weight: 700; }
   </style>
@@ -58,7 +62,7 @@
       <textarea id="ingredientsInput" placeholder="eggs, milk, spinach, tomato, cheese"></textarea>
 
       <div class="preview" id="previewArea" hidden>
-        <p class="note">Photo preview</p>
+        <p class="note" style="font-weight: 600; color: #334155; margin: 0 0 12px;">Photo preview</p>
         <img id="previewImage" alt="Fridge photo preview" />
       </div>
 
@@ -89,37 +93,44 @@
       {
         name: 'Vegetable Omelette',
         description: 'A quick savory omelette with greens, cheese, and veggies.',
-        ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion']
+        ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion'],
+        image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop'
       },
       {
         name: 'Yogurt Parfait',
         description: 'A fresh parfait layered with yogurt, berries, and granola.',
-        ingredients: ['yogurt', 'berries', 'granola', 'honey']
+        ingredients: ['yogurt', 'berries', 'granola', 'honey'],
+        image: 'https://images.unsplash.com/photo-1553530666-ba2a8e36c1f5?w=400&h=300&fit=crop'
       },
       {
         name: 'Pasta Primavera',
         description: 'A bright pasta dish with tomato, zucchini, and parmesan.',
-        ingredients: ['pasta', 'tomato', 'zucchini', 'garlic', 'olive oil', 'parmesan']
+        ingredients: ['pasta', 'tomato', 'zucchini', 'garlic', 'olive oil', 'parmesan'],
+        image: 'https://images.unsplash.com/photo-1473093295203-cad00df16e50?w=400&h=300&fit=crop'
       },
       {
         name: 'Avocado Toast',
         description: 'Crispy toast topped with mashed avocado and seasonings.',
-        ingredients: ['bread', 'avocado', 'lemon', 'salt', 'pepper']
+        ingredients: ['bread', 'avocado', 'lemon', 'salt', 'pepper'],
+        image: 'https://images.unsplash.com/photo-1527521578519-e21cc028cb29?w=400&h=300&fit=crop'
       },
       {
         name: 'Smoothie Bowl',
         description: 'A creamy fruit smoothie bowl with spinach or berries.',
-        ingredients: ['banana', 'spinach', 'milk', 'berries', 'peanut butter']
+        ingredients: ['banana', 'spinach', 'milk', 'berries', 'peanut butter'],
+        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop'
       },
       {
         name: 'Tomato Soup',
         description: 'A cozy tomato soup you can finish with bread or cheese.',
-        ingredients: ['tomato', 'onion', 'garlic', 'bread', 'cheese']
+        ingredients: ['tomato', 'onion', 'garlic', 'bread', 'cheese'],
+        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop'
       },
       {
         name: 'Stir Fry Rice',
         description: 'A simple stir fry with veggies and rice, great for leftovers.',
-        ingredients: ['rice', 'broccoli', 'carrot', 'soy sauce', 'garlic', 'onion']
+        ingredients: ['rice', 'broccoli', 'carrot', 'soy sauce', 'garlic', 'onion'],
+        image: 'https://images.unsplash.com/photo-1603894542802-f3a2f16ab519?w=400&h=300&fit=crop'
       }
     ];
 
@@ -167,7 +178,7 @@
       results.innerHTML = '';
       const available = ingredients.map(normalizeIngredient).filter(Boolean);
       if (!available.length) {
-        results.innerHTML = '<div class="card"><p class="note">Enter ingredients so the helper can suggest recipes.</p></div>';
+        results.innerHTML = '<div class="card heading-card"><p class="note">Enter ingredients so the helper can suggest recipes.</p></div>';
         return;
       }
 
@@ -179,22 +190,22 @@
 
       if (perfect.length) {
         const heading = document.createElement('div');
-        heading.className = 'card';
-        heading.innerHTML = '<h2>Recipes you can make now</h2><p>These recipes match the ingredients you entered.</p>';
+        heading.className = 'card heading-card';
+        heading.innerHTML = '<div style="padding: 20px;"><h2>Recipes you can make now</h2><p>These recipes match the ingredients you entered.</p></div>';
         results.appendChild(heading);
         perfect.forEach(item => results.appendChild(createRecipeCard(item, true)));
       } else {
         const heading = document.createElement('div');
-        heading.className = 'card';
-        heading.innerHTML = '<h2>No exact matches yet</h2><p>These recipes are close. Add the missing ingredient(s) to complete them.</p>';
+        heading.className = 'card heading-card';
+        heading.innerHTML = '<div style="padding: 20px;"><h2>No exact matches yet</h2><p>These recipes are close. Add the missing ingredient(s) to complete them.</p></div>';
         results.appendChild(heading);
       }
 
-      partial.slice(0, 3).forEach(item => results.appendChild(createRecipeCard(item, false)));
+      partial.slice(0, 5).forEach(item => results.appendChild(createRecipeCard(item, false)));
 
       const tipsCard = document.createElement('div');
-      tipsCard.className = 'card';
-      tipsCard.innerHTML = `<h2>Recipe tips</h2><p class="note">Try adding one or two missing ingredients to complete a recipe, or type extra items such as cheese, herbs, or bread to expand the match list.</p>`;
+      tipsCard.className = 'card heading-card';
+      tipsCard.innerHTML = `<div style="padding: 20px;"><h2>Recipe tips</h2><p class="note">Try adding one or two missing ingredients to complete a recipe, or type extra items such as cheese, herbs, or bread to expand the match list.</p></div>`;
       results.appendChild(tipsCard);
     }
 
@@ -202,11 +213,14 @@
       const card = document.createElement('article');
       card.className = 'card';
       card.innerHTML = `
-        <h2>${match.recipe.name}</h2>
-        <p>${match.recipe.description}</p>
-        <p><strong>Ingredients:</strong></p>
-        <ul class="chips">${match.recipe.ingredients.map(i => `<li class="chip">${i}</li>`).join('')}</ul>
-        ${exact ? '<p class="note">All required ingredients are available.</p>' : `<p class="note">Missing: ${match.missing.join(', ')}</p>`}
+        <img src="${match.recipe.image}" alt="${match.recipe.name}" class="card-image" onerror="this.style.background='linear-gradient(135deg, #eef2ff 0%, #f0f7ff 100%)'" />
+        <div class="card-content">
+          <h2>${match.recipe.name}</h2>
+          <p>${match.recipe.description}</p>
+          <p><strong>Ingredients:</strong></p>
+          <ul class="chips">${match.recipe.ingredients.map(i => `<li class="chip">${i}</li>`).join('')}</ul>
+          ${exact ? '<p class="note">All required ingredients are available.</p>' : `<p class="note">Missing: ${match.missing.join(', ')}</p>`}
+        </div>
       `;
       return card;
     }
