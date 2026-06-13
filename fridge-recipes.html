@@ -31,10 +31,12 @@
     .input-group textarea, .input-group input[type=file] { width: 100%; }
     @media (max-width: 768px) { .input-row { grid-template-columns: 1fr; } }
     .row { display: grid; gap: 16px; }
-    .cuisine-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-    .cuisine-btn { padding: 8px 14px; border-radius: 999px; border: 2px solid #cbd5e1; background: white; color: #334155; cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease; }
-    .cuisine-btn:hover { border-color: #a78bfa; }
-    .cuisine-btn.active { background: #4f46e5; color: white; border-color: #4f46e5; }
+    .filter-section { margin: 20px 0; padding: 16px; background: #f8fafc; border-radius: 16px; }
+    .filter-label { font-weight: 600; color: #334155; margin-bottom: 12px; display: block; font-size: 0.9rem; }
+    .filter-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter-btn { padding: 8px 14px; border-radius: 999px; border: 2px solid #cbd5e1; background: white; color: #334155; cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease; }
+    .filter-btn:hover { border-color: #a78bfa; }
+    .filter-btn.active { background: #4f46e5; color: white; border-color: #4f46e5; }
     .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
     button { border: none; border-radius: 999px; padding: 12px 18px; font-size: 0.98rem; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
     button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(79, 70, 229, 0.18); }
@@ -58,6 +60,8 @@
     .preview img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 20px; border: 2px solid #e2e8f0; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12); }
     .footer { margin-top: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: #667085; font-size: 0.95rem; }
     .accent { color: #4338ca; font-weight: 700; }
+    .recipe-link { display: inline-block; margin-top: auto; padding: 10px 14px; border-radius: 8px; background: #eef2ff; color: #4338ca; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: all 0.2s ease; text-align: center; }
+    .recipe-link:hover { background: #4f46e5; color: white; }
   </style>
 </head>
 <body>
@@ -81,7 +85,20 @@
         </div>
       </div>
 
-      <div class="cuisine-filters" id="cuisineFilters"></div>
+      <div class="filter-section">
+        <label class="filter-label">Filter by cuisine:</label>
+        <div class="filter-buttons" id="cuisineFilters"></div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Filter by flavor:</label>
+        <div class="filter-buttons" id="flavorFilters"></div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Filter by dietary:</label>
+        <div class="filter-buttons" id="dietaryFilters"></div>
+      </div>
 
       <div class="buttons">
         <button id="findBtn" class="primary">Find recipes</button>
@@ -104,14 +121,204 @@
 
   <script>
     const recipes = [
-      {
-        name: 'Vegetable Omelette',
-        description: 'A quick savory omelette with greens, cheese, and veggies.',
-        ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion'],
-        image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop',
-        cuisine: 'American',
-        tutorial: 'https://www.allrecipes.com/recipe/24488/vegetable-omelette/'
-      },
+      { name: 'Vegetable Omelette', description: 'A quick savory omelette with greens, cheese, and veggies.', ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion'], image: 'https://images.unsplash.com/photo-1587014675280-a60dc4e83cf9?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/24488/' },
+      { name: 'Yogurt Parfait', description: 'A fresh parfait layered with yogurt, berries, and granola.', ingredients: ['yogurt', 'berries', 'granola', 'honey'], image: 'https://images.unsplash.com/photo-1488477181946-85a2bc33eae0?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/228788/' },
+      { name: 'Pasta Primavera', description: 'A bright pasta dish with tomato, zucchini, and parmesan.', ingredients: ['pasta', 'tomato', 'zucchini', 'garlic', 'olive oil', 'parmesan'], image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop', cuisines: ['Italian'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/12380/' },
+      { name: 'Avocado Toast', description: 'Crispy toast topped with mashed avocado and seasonings.', ingredients: ['bread', 'avocado', 'lemon', 'salt', 'pepper'], image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/277396/' },
+      { name: 'Smoothie Bowl', description: 'A creamy fruit smoothie bowl with spinach or berries.', ingredients: ['banana', 'spinach', 'milk', 'berries', 'peanut butter'], image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/261299/' },
+      { name: 'French Onion Soup', description: 'Rich caramelized onion soup with melted gruyere and crusty bread.', ingredients: ['onion', 'beef broth', 'bread', 'gruyere', 'butter', 'thyme'], image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop', cuisines: ['French'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/21114/' },
+      { name: 'Stir Fry Rice', description: 'Simple fried rice with veggies, eggs, and soy sauce.', ingredients: ['rice', 'eggs', 'broccoli', 'carrot', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1603894542802-f3a2f16ab519?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/12689/' },
+      { name: 'Pad Thai', description: 'Thai noodle dish with peanut sauce, lime, and fresh veggies.', ingredients: ['rice noodles', 'shrimp', 'eggs', 'peanut butter', 'lime', 'garlic'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['sweet', 'sour'], dietaries: ['pescatarian'], tutorial: 'https://www.allrecipes.com/recipe/86303/' },
+      { name: 'Kung Pao Chicken', description: 'Spicy Sichuan-style chicken with peanuts and dried chilies.', ingredients: ['chicken', 'peanuts', 'soy sauce', 'rice vinegar', 'chili paste', 'garlic'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/78933/' },
+      { name: 'Miso Soup', description: 'Light Japanese soup with tofu, seaweed, and umami-rich miso.', ingredients: ['miso paste', 'tofu', 'seaweed', 'green onion', 'dashi'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/76566/' },
+      { name: 'Sushi Roll', description: 'Crispy sushi rolls with fresh fish, cucumber, and avocado.', ingredients: ['rice', 'nori', 'salmon', 'cucumber', 'avocado', 'rice vinegar'], image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/25230/' },
+      { name: 'Shrimp Saganaki', description: 'Mediterranean shrimp baked in tomato sauce with feta cheese.', ingredients: ['shrimp', 'tomato', 'feta', 'olive oil', 'garlic', 'oregano'], image: 'https://images.unsplash.com/photo-1599599810694-b5ac4dd4c4d9?w=400&h=300&fit=crop', cuisines: ['Mediterranean'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/215736/' },
+      { name: 'Falafel', description: 'Crispy fried chickpea balls with tahini sauce and pita.', ingredients: ['chickpeas', 'onion', 'garlic', 'cumin', 'parsley', 'flour'], image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop', cuisines: ['Middle Eastern'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/21457/' },
+      { name: 'Ceviche', description: 'Fresh Peruvian raw fish cured in lime juice with vegetables.', ingredients: ['white fish', 'lime', 'cilantro', 'red onion', 'jalapeño', 'corn'], image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop', cuisines: ['Peruvian'], flavors: ['sour'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/65701/' },
+      { name: 'Tacos Al Pastor', description: 'Spanish-style marinated pork tacos with pineapple and onion.', ingredients: ['pork', 'achiote', 'pineapple', 'onion', 'cilantro', 'tortillas'], image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop', cuisines: ['Spanish'], flavors: ['sweet', 'savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/12953/' },
+      { name: 'Mapo Tofu', description: 'Spicy Hunan tofu in numbing and fiery sauce with ground pork.', ingredients: ['tofu', 'ground pork', 'sichuan pepper', 'chili oil', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Hunan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/11787/' },
+      { name: 'Paella', description: 'Spanish rice dish with seafood, saffron, and peppers.', ingredients: ['rice', 'saffron', 'shrimp', 'mussels', 'bell pepper', 'onion'], image: 'https://images.unsplash.com/photo-1505521585397-e51fb1fd56d0?w=400&h=300&fit=crop', cuisines: ['Spanish'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/16923/' },
+      { name: 'Dan Dan Noodles', description: 'Spicy Sichuan noodles with numbing peppercorn and sesame oil.', ingredients: ['noodles', 'minced pork', 'sichuan oil', 'sesame', 'green onion', 'chili'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/280085/' },
+      { name: 'Coq au Vin', description: 'French braised chicken in red wine with mushrooms and bacon.', ingredients: ['chicken', 'red wine', 'mushrooms', 'pearl onions', 'bacon', 'thyme'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['French'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/13819/' },
+      { name: 'Chow Mein', description: 'Cantonese stir-fried noodles with vegetables and protein.', ingredients: ['noodles', 'cabbage', 'carrot', 'soy sauce', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/12690/' },
+      { name: 'Buddha Bowl', description: 'Healthy grain bowl with quinoa, roasted veggies, and tahini.', ingredients: ['quinoa', 'kale', 'chickpeas', 'sweet potato', 'beets', 'tahini'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/280285/' },
+      { name: 'Jiaozi (Dumplings)', description: 'Jiangsu-style steamed pork and vegetable dumplings.', ingredients: ['flour', 'pork', 'cabbage', 'ginger', 'soy sauce', 'sesame oil'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Chinese - Jiangsu'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/10555/' },
+      { name: 'Peking Duck', description: 'Shandong specialty: crispy duck with plum sauce and thin pancakes.', ingredients: ['duck', 'plum sauce', 'pancakes', 'cucumber', 'green onion', 'soy sauce'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Shandong'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/25149/' },
+      { name: 'Shrimp Tempura', description: 'Japanese crispy battered shrimp with dipping sauce.', ingredients: ['shrimp', 'flour', 'egg', 'panko', 'oil', 'dashi'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['pescatarian'], tutorial: 'https://www.allrecipes.com/recipe/28202/' },
+      { name: 'Hummus', description: 'Middle Eastern chickpea dip with tahini, lemon, and garlic.', ingredients: ['chickpeas', 'tahini', 'lemon', 'garlic', 'olive oil', 'paprika'], image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop', cuisines: ['Middle Eastern'], flavors: ['savory', 'sour'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/26080/' }
+    ];
+
+    const ingredientInput = document.getElementById('ingredientsInput');
+    const findBtn = document.getElementById('findBtn');
+    const sampleBtn = document.getElementById('sampleBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const results = document.getElementById('results');
+    const imageInput = document.getElementById('imageInput');
+    
+    const sampleIngredients = 'eggs, milk, spinach, tomato, cheese, bread, avocado';
+    let selectedCuisines = [];
+    let selectedFlavors = [];
+    let selectedDietaries = [];
+
+    function normalizeIngredient(text) {
+      return text
+        .toLowerCase()
+        .replace(/\b(and|or|with|fresh|large|small|cup|cups|slice|slices|a|the)\b/g, ' ')
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function parseIngredients(text) {
+      if (!text || !text.trim()) return [];
+      return text
+        .split(/[\n,;]+/)  
+        .map(part => normalizeIngredient(part))
+        .filter(Boolean);
+    }
+
+    function matchRecipe(recipe, available) {
+      const required = recipe.ingredients.map(normalizeIngredient).filter(Boolean);
+      const found = required.filter(req =>
+        available.some(item => item.includes(req) || req.includes(item))
+      );
+      return {
+        recipe,
+        foundCount: found.length,
+        missing: required.filter(req => !found.includes(req))
+      };
+    }
+
+    function showResults(ingredients) {
+      results.innerHTML = '';
+      const available = ingredients.map(normalizeIngredient).filter(Boolean);
+      if (!available.length) {
+        results.innerHTML = '<div class="card heading-card"><div style="padding: 20px;"><p class="note">Enter ingredients so the helper can suggest recipes.</p></div></div>';
+        return;
+      }
+
+      let matches = recipes.map(recipe => matchRecipe(recipe, available));
+      
+      // Filter by selected categories
+      matches = matches.filter(item => {
+        const passedCuisine = selectedCuisines.length === 0 || item.recipe.cuisines.some(c => selectedCuisines.includes(c));
+        const passedFlavor = selectedFlavors.length === 0 || item.recipe.flavors.some(f => selectedFlavors.includes(f));
+        const passedDietary = selectedDietaries.length === 0 || item.recipe.dietaries.some(d => selectedDietaries.includes(d));
+        return passedCuisine && passedFlavor && passedDietary;
+      });
+      
+      const perfect = matches.filter(item => item.missing.length === 0);
+      const partial = matches
+        .filter(item => item.missing.length > 0)
+        .sort((a, b) => b.foundCount - a.foundCount || a.missing.length - b.missing.length);
+
+      if (perfect.length) {
+        const heading = document.createElement('div');
+        heading.className = 'card heading-card';
+        heading.innerHTML = '<div style="padding: 20px;"><h2>Recipes you can make now</h2><p>These recipes match your ingredients.</p></div>';
+        results.appendChild(heading);
+        perfect.forEach(item => results.appendChild(createRecipeCard(item, true)));
+      } else if (partial.length) {
+        const heading = document.createElement('div');
+        heading.className = 'card heading-card';
+        heading.innerHTML = '<div style="padding: 20px;"><h2>Close matches</h2><p>These recipes are close. Add the missing ingredient(s) to complete them.</p></div>';
+        results.appendChild(heading);
+      } else {
+        const heading = document.createElement('div');
+        heading.className = 'card heading-card';
+        heading.innerHTML = '<div style="padding: 20px;"><p class="note">No recipes match your filters. Try different selections.</p></div>';
+        results.appendChild(heading);
+        return;
+      }
+
+      partial.slice(0, 8).forEach(item => results.appendChild(createRecipeCard(item, false)));
+    }
+
+    function createRecipeCard(match, exact) {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${match.recipe.image}" alt="${match.recipe.name}" class="card-image" />
+        <div class="card-content">
+          <h2>${match.recipe.name}</h2>
+          <p>${match.recipe.description}</p>
+          <p><strong>Ingredients:</strong></p>
+          <ul class="chips">${match.recipe.ingredients.map(i => `<li class="chip">${i}</li>`).join('')}</ul>
+          ${exact ? '<p class="note">All required ingredients are available.</p>' : `<p class="note">Missing: ${match.missing.join(', ')}</p>`}
+          <a href="${match.recipe.tutorial}" target="_blank" rel="noopener noreferrer" class="recipe-link">Learn how to make it</a>
+        </div>
+      `;
+      return card;
+    }
+
+    function initializeFilters() {
+      const cuisines = [...new Set(recipes.flatMap(r => r.cuisines))].sort();
+      const flavors = [...new Set(recipes.flatMap(r => r.flavors))].sort();
+      const dietaries = [...new Set(recipes.flatMap(r => r.dietaries))].sort();
+
+      const cuisineContainer = document.getElementById('cuisineFilters');
+      cuisines.forEach(cuisine => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = cuisine;
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          selectedCuisines = Array.from(cuisineContainer.querySelectorAll('.filter-btn.active')).map(b => b.textContent);
+          if (ingredientInput.value.trim()) showResults(parseIngredients(ingredientInput.value));
+        });
+        cuisineContainer.appendChild(btn);
+      });
+
+      const flavorContainer = document.getElementById('flavorFilters');
+      flavors.forEach(flavor => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = flavor;
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          selectedFlavors = Array.from(flavorContainer.querySelectorAll('.filter-btn.active')).map(b => b.textContent);
+          if (ingredientInput.value.trim()) showResults(parseIngredients(ingredientInput.value));
+        });
+        flavorContainer.appendChild(btn);
+      });
+
+      const dietaryContainer = document.getElementById('dietaryFilters');
+      dietaries.forEach(dietary => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = dietary;
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          selectedDietaries = Array.from(dietaryContainer.querySelectorAll('.filter-btn.active')).map(b => b.textContent);
+          if (ingredientInput.value.trim()) showResults(parseIngredients(ingredientInput.value));
+        });
+        dietaryContainer.appendChild(btn);
+      });
+    }
+
+    findBtn.addEventListener('click', () => showResults(parseIngredients(ingredientInput.value)));
+    sampleBtn.addEventListener('click', () => {
+      ingredientInput.value = sampleIngredients;
+      showResults(parseIngredients(sampleIngredients));
+    });
+    clearBtn.addEventListener('click', () => {
+      ingredientInput.value = '';
+      results.innerHTML = '';
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      selectedCuisines = [];
+      selectedFlavors = [];
+      selectedDietaries = [];
+    });
+
+    ingredientInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && event.shiftKey) {
+        event.preventDefault();
+        showResults(parseIngredients(ingredientInput.value));
+      }
+    });
+
+    initializeFilters();
+  </script>
       {
         name: 'Yogurt Parfait',
         description: 'A fresh parfait layered with yogurt, berries, and granola.',
