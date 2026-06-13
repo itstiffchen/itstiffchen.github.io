@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fridge Recipe Helper | Tiffany Chen</title>
   <meta name="description" content="Enter fridge ingredients and get recipe ideas." />
+  <link rel="icon" href="/icon.svg?af92ecacf74051f0" type="image/svg+xml" sizes="any"/>
   <style>
     :root {
       color-scheme: light;
@@ -24,7 +25,16 @@
     label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; }
     textarea, input[type=file] { width: 100%; border: 1px solid #cbd5e1; border-radius: 16px; padding: 14px 16px; font-size: 1rem; background: #f8fafc; color: #0f172a; }
     textarea { min-height: 140px; resize: vertical; }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 16px; }
+    .input-group { display: flex; flex-direction: column; }
+    .input-group label { margin-bottom: 8px; }
+    .input-group textarea, .input-group input[type=file] { width: 100%; }
+    @media (max-width: 768px) { .input-row { grid-template-columns: 1fr; } }
     .row { display: grid; gap: 16px; }
+    .cuisine-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .cuisine-btn { padding: 8px 14px; border-radius: 999px; border: 2px solid #cbd5e1; background: white; color: #334155; cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease; }
+    .cuisine-btn:hover { border-color: #a78bfa; }
+    .cuisine-btn.active { background: #4f46e5; color: white; border-color: #4f46e5; }
     .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
     button { border: none; border-radius: 999px; padding: 12px 18px; font-size: 0.98rem; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
     button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(79, 70, 229, 0.18); }
@@ -38,6 +48,8 @@
     .card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; }
     .card h2 { margin: 0 0 8px; font-size: 1.1rem; }
     .card p { margin: 0 0 12px; line-height: 1.6; color: #475569; font-size: 0.95rem; }
+    .recipe-link { display: inline-block; margin-top: auto; padding: 10px 14px; border-radius: 8px; background: #eef2ff; color: #4338ca; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: all 0.2s ease; text-align: center; }
+    .recipe-link:hover { background: #4f46e5; color: white; }
     .heading-card { grid-column: 1 / -1; }
     .heading-card h2 { margin: 0 0 8px; font-size: 1.3rem; }
     .heading-card p { margin: 0; color: #667085; }
@@ -58,16 +70,18 @@
     </div>
 
     <section class="panel">
-      <label for="ingredientsInput">What’s in your fridge?</label>
-      <textarea id="ingredientsInput" placeholder="eggs, milk, spinach, tomato, cheese"></textarea>
-
-      <div class="preview" id="previewArea" hidden>
-        <p class="note" style="font-weight: 600; color: #334155; margin: 0 0 12px;">Photo preview</p>
-        <img id="previewImage" alt="Fridge photo preview" />
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ingredientsInput">What's in your fridge?</label>
+          <textarea id="ingredientsInput" placeholder="eggs, milk, spinach, tomato, cheese"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="imageInput">Choose a fridge photo (optional)</label>
+          <input id="imageInput" type="file" accept="image/*" capture="environment" />
+        </div>
       </div>
 
-      <label for="imageInput" class="note" style="margin-top: 18px;">Choose a fridge photo (optional)</label>
-      <input id="imageInput" type="file" accept="image/*" capture="environment" />
+      <div class="cuisine-filters" id="cuisineFilters"></div>
 
       <div class="buttons">
         <button id="findBtn" class="primary">Find recipes</button>
@@ -83,7 +97,7 @@
         <span class="accent">How it works:</span> type ingredients separated by commas, newlines, or spaces.
       </div>
       <div>
-        <span class="accent">Note:</span> image upload currently shows a preview; typing ingredients gives the best recipe matches.
+        <span class="accent">Filter by cuisine:</span> select a cuisine type to narrow down recipe suggestions.
       </div>
     </div>
   </div>
@@ -94,43 +108,81 @@
         name: 'Vegetable Omelette',
         description: 'A quick savory omelette with greens, cheese, and veggies.',
         ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion'],
-        image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop',
+        cuisine: 'American',
+        tutorial: 'https://www.allrecipes.com/recipe/24488/vegetable-omelette/'
       },
       {
         name: 'Yogurt Parfait',
         description: 'A fresh parfait layered with yogurt, berries, and granola.',
         ingredients: ['yogurt', 'berries', 'granola', 'honey'],
-        image: 'https://images.unsplash.com/photo-1553530666-ba2a8e36c1f5?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1553530666-ba2a8e36c1f5?w=400&h=300&fit=crop',
+        cuisine: 'American',
+        tutorial: 'https://www.allrecipes.com/recipe/228788/yogurt-berry-parfait/'
       },
       {
         name: 'Pasta Primavera',
         description: 'A bright pasta dish with tomato, zucchini, and parmesan.',
         ingredients: ['pasta', 'tomato', 'zucchini', 'garlic', 'olive oil', 'parmesan'],
-        image: 'https://images.unsplash.com/photo-1473093295203-cad00df16e50?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1473093295203-cad00df16e50?w=400&h=300&fit=crop',
+        cuisine: 'Italian',
+        tutorial: 'https://www.allrecipes.com/recipe/12380/pasta-primavera/'
       },
       {
         name: 'Avocado Toast',
         description: 'Crispy toast topped with mashed avocado and seasonings.',
         ingredients: ['bread', 'avocado', 'lemon', 'salt', 'pepper'],
-        image: 'https://images.unsplash.com/photo-1527521578519-e21cc028cb29?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1527521578519-e21cc028cb29?w=400&h=300&fit=crop',
+        cuisine: 'American',
+        tutorial: 'https://www.allrecipes.com/recipe/277396/avocado-toast/'
       },
       {
         name: 'Smoothie Bowl',
         description: 'A creamy fruit smoothie bowl with spinach or berries.',
         ingredients: ['banana', 'spinach', 'milk', 'berries', 'peanut butter'],
-        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop',
+        cuisine: 'American',
+        tutorial: 'https://www.allrecipes.com/recipe/261299/smoothie-bowl/'
       },
       {
         name: 'Tomato Soup',
         description: 'A cozy tomato soup you can finish with bread or cheese.',
         ingredients: ['tomato', 'onion', 'garlic', 'bread', 'cheese'],
-        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop',
+        cuisine: 'American',
+        tutorial: 'https://www.allrecipes.com/recipe/25107/tomato-soup-iv/'
       },
       {
         name: 'Stir Fry Rice',
         description: 'A simple stir fry with veggies and rice, great for leftovers.',
         ingredients: ['rice', 'broccoli', 'carrot', 'soy sauce', 'garlic', 'onion'],
-        image: 'https://images.unsplash.com/photo-1603894542802-f3a2f16ab519?w=400&h=300&fit=crop'
+        image: 'https://images.unsplash.com/photo-1603894542802-f3a2f16ab519?w=400&h=300&fit=crop',
+        cuisine: 'Asian',
+        tutorial: 'https://www.allrecipes.com/recipe/12689/fried-rice/'
+      },
+      {
+        name: 'Pad Thai',
+        description: 'A delicious Thai noodle dish with peanut sauce and fresh veggies.',
+        ingredients: ['rice noodles', 'shrimp', 'eggs', 'peanut butter', 'lime', 'garlic'],
+        image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop',
+        cuisine: 'Asian',
+        tutorial: 'https://www.allrecipes.com/recipe/86303/pad-thai/'
+      },
+      {
+        name: 'Risotto',
+        description: 'A creamy Italian rice dish with parmesan and herbs.',
+        ingredients: ['rice', 'onion', 'garlic', 'broth', 'wine', 'parmesan', 'butter'],
+        image: 'https://images.unsplash.com/photo-1527521578519-e21cc028cb29?w=400&h=300&fit=crop',
+        cuisine: 'Italian',
+        tutorial: 'https://www.allrecipes.com/recipe/85/risotto/'
+      },
+      {
+        name: 'Tacos',
+        description: 'Fresh tacos with seasoned meat, cilantro, and lime.',
+        ingredients: ['tortillas', 'ground beef', 'cilantro', 'lime', 'onion', 'tomato'],
+        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop',
+        cuisine: 'Mexican',
+        tutorial: 'https://www.allrecipes.com/recipe/12953/basic-tacos/'
       }
     ];
 
@@ -140,10 +192,10 @@
     const clearBtn = document.getElementById('clearBtn');
     const results = document.getElementById('results');
     const imageInput = document.getElementById('imageInput');
-    const previewArea = document.getElementById('previewArea');
-    const previewImage = document.getElementById('previewImage');
+    const cuisineFiltersContainer = document.getElementById('cuisineFilters');
 
     const sampleIngredients = 'eggs, milk, spinach, tomato, cheese, bread, avocado';
+    let selectedCuisine = 'All';
 
     function normalizeIngredient(text) {
       return text
@@ -182,7 +234,13 @@
         return;
       }
 
-      const matches = recipes.map(recipe => matchRecipe(recipe, available));
+      let matches = recipes.map(recipe => matchRecipe(recipe, available));
+      
+      // Filter by cuisine if not "All"
+      if (selectedCuisine !== 'All') {
+        matches = matches.filter(item => item.recipe.cuisine === selectedCuisine);
+      }
+      
       const perfect = matches.filter(item => item.missing.length === 0);
       const partial = matches
         .filter(item => item.missing.length > 0)
@@ -209,6 +267,25 @@
       results.appendChild(tipsCard);
     }
 
+    function initializeCuisineFilters() {
+      const cuisines = ['All', ...new Set(recipes.map(r => r.cuisine))];
+      cuisineFiltersContainer.innerHTML = '';
+      cuisines.forEach(cuisine => {
+        const btn = document.createElement('button');
+        btn.className = `cuisine-btn ${cuisine === 'All' ? 'active' : ''}`;
+        btn.textContent = cuisine;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.cuisine-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedCuisine = cuisine;
+          if (ingredientInput.value.trim()) {
+            showResults(parseIngredients(ingredientInput.value));
+          }
+        });
+        cuisineFiltersContainer.appendChild(btn);
+      });
+    }
+
     function createRecipeCard(match, exact) {
       const card = document.createElement('article');
       card.className = 'card';
@@ -220,6 +297,7 @@
           <p><strong>Ingredients:</strong></p>
           <ul class="chips">${match.recipe.ingredients.map(i => `<li class="chip">${i}</li>`).join('')}</ul>
           ${exact ? '<p class="note">All required ingredients are available.</p>' : `<p class="note">Missing: ${match.missing.join(', ')}</p>`}
+          <a href="${match.recipe.tutorial}" target="_blank" rel="noopener noreferrer" class="recipe-link">Learn how to make it</a>
         </div>
       `;
       return card;
@@ -232,17 +310,17 @@
     });
     clearBtn.addEventListener('click', () => {
       ingredientInput.value = '';
-      previewArea.hidden = true;
-      previewImage.src = '';
       results.innerHTML = '';
+      document.querySelectorAll('.cuisine-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.cuisine-btn').classList.add('active');
+      selectedCuisine = 'All';
     });
 
     imageInput.addEventListener('change', event => {
       const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
-      previewImage.src = url;
-      previewArea.hidden = false;
+      if (file) {
+        console.log('Photo selected:', file.name);
+      }
     });
 
     ingredientInput.addEventListener('keydown', event => {
@@ -251,6 +329,9 @@
         showResults(parseIngredients(ingredientInput.value));
       }
     });
+
+    // Initialize on page load
+    initializeCuisineFilters();
   </script>
 </body>
 </html>
