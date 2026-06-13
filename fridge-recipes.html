@@ -1,86 +1,248 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fridge Recipe Helper | Tiffany Chen</title>
   <meta name="description" content="Enter fridge ingredients and get recipe ideas." />
-  <link rel="icon" href="/icon.svg?af92ecacf74051f0" type="image/svg+xml" sizes="any"/>
+  <link rel="icon" type="image/svg+xml" sizes="any" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='url(%23bg)'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='%23fff'%3E%F0%9F%8D%B3%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      color-scheme: light;
-      font-family: Inter, system-ui, sans-serif;
-      background: #f4f7ff;
-      color: #17213f;
+      --background: #f0eef6;
+      --foreground: #1a2744;
     }
 
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; }
-    .page { max-width: 900px; margin: 0 auto; padding: 24px; }
-    .hero { padding: 28px; border-radius: 28px; background: #ffffffee; box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08); }
-    .hero h1 { margin: 0 0 12px; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.04em; }
-    .hero p { margin: 0 0 18px; line-height: 1.7; color: #4a5578; }
-    .hero a { color: #4f46e5; text-decoration: none; font-weight: 600; }
-    .panel { margin-top: 28px; }
-    label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; }
-    textarea, input[type=file] { width: 100%; border: 1px solid #cbd5e1; border-radius: 16px; padding: 14px 16px; font-size: 1rem; background: #f8fafc; color: #0f172a; }
-    textarea { min-height: 140px; resize: vertical; }
-    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 16px; }
-    .input-group { display: flex; flex-direction: column; }
-    .input-group label { margin-bottom: 8px; }
-    .input-group textarea, .input-group input[type=file] { width: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(224, 218, 255, 0.55) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(199, 220, 255, 0.5) 0%, transparent 55%),
+        var(--background);
+      color: var(--foreground);
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    .page { padding: 3rem 1.25rem; }
+    @media (min-width: 640px) { .page { padding: 4rem 2rem; } }
+
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+      border-radius: 1rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.65);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 12px 48px -16px rgba(99,102,241,0.22), 0 4px 24px -8px rgba(139,92,246,0.12);
+      backdrop-filter: blur(12px);
+    }
+    @media (min-width: 640px) { .container { padding: 3rem 2.5rem; } }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem;
+      border: 1px solid #e0e7ff;
+      background: rgba(255,255,255,0.6);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #3d5a9e;
+      text-decoration: none;
+      transition: background 0.15s;
+      width: fit-content;
+    }
+    .back-link:hover { background: rgba(255,255,255,0.8); }
+    .back-link .arrow { font-size: 1.25rem; }
+
+    header { margin-bottom: 2rem; }
+    header h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 2.35rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+    header h1 span {
+      background: linear-gradient(to right, #1e3a5f, #3d5a9e, #6b5b95);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p { margin-top: 0.5rem; color: #5a6288; }
+
+    .site-rule {
+      border: none;
+      height: 2px;
+      margin: 2rem 0;
+      background: linear-gradient(to right, #6366f1, #a78bfa, #60a5fa);
+      opacity: 0.25;
+      border-radius: 9999px;
+    }
+
+    .section-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #243b6b, #3d5a9e, #5c4d7a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem; }
     @media (max-width: 768px) { .input-row { grid-template-columns: 1fr; } }
-    .row { display: grid; gap: 16px; }
-    .filter-section { margin: 20px 0; padding: 16px; background: #f8fafc; border-radius: 16px; }
-    .filter-label { font-weight: 600; color: #334155; margin-bottom: 12px; display: block; font-size: 0.9rem; }
-    .filter-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
-    .filter-btn { padding: 8px 14px; border-radius: 999px; border: 2px solid #cbd5e1; background: white; color: #334155; cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease; }
-    .filter-btn:hover { border-color: #a78bfa; }
-    .filter-btn.active { background: #4f46e5; color: white; border-color: #4f46e5; }
-    .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
-    button { border: none; border-radius: 999px; padding: 12px 18px; font-size: 0.98rem; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
-    button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(79, 70, 229, 0.18); }
-    .primary { background: #4f46e5; color: white; }
-    .secondary { background: #eef2ff; color: #4338ca; }
-    .text { background: white; color: #475569; box-shadow: inset 0 0 0 1px #e2e8f0; }
-    .results { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .card { background: white; border-radius: 22px; border: 1px solid #e2e8f0; padding: 0; margin-bottom: 0; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12); }
-    .card-image { width: 100%; height: 200px; object-fit: cover; background: linear-gradient(135deg, #eef2ff 0%, #f0f7ff 100%); }
-    .card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; }
-    .card-content h2 { margin: 0 0 8px; font-size: 1.1rem; }
-    .card-content p { margin: 0 0 12px; font-size: 0.9rem; line-height: 1.5; color: #4a5578; }
-    .chips { list-style: none; padding: 0; margin: 0 0 12px; display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip { background: #eef2ff; color: #4338ca; padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; }
-    .note { color: #64748b; font-size: 0.85rem; font-style: italic; }
-    .recipe-link { color: #4f46e5; text-decoration: none; font-weight: 600; margin-top: auto; }
-    .recipe-link:hover { text-decoration: underline; }
-    .heading-card { background: #f8fafc; }
-    .heading-card h2 { margin-bottom: 8px; }
-    .heading-card p { color: #64748b; }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #3d5a9e;
+    }
+
+    textarea, input[type=file] {
+      width: 100%;
+      border: 1px solid #e0e7ff;
+      border-radius: 0.5rem;
+      padding: 0.625rem 0.75rem;
+      font-size: 0.875rem;
+      background: rgba(255,255,255,0.8);
+      color: #1a2744;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    textarea:focus { border-color: #6366f1; outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+    textarea { min-height: 120px; resize: vertical; }
+
+    .filter-section {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: 0.75rem;
+      border: 1px solid #e0e7ff;
+    }
+    .filter-label { font-size: 0.8rem; font-weight: 600; color: #3d5a9e; margin-bottom: 0.75rem; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
+    .filter-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .filter-btn {
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid #e0e7ff;
+      background: rgba(255,255,255,0.6);
+      color: #5a6288;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { background: rgba(255,255,255,0.9); border-color: #a78bfa; }
+    .filter-btn.active { background: #3d5a9e; color: white; border-color: #3d5a9e; }
+
+    .buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+    .btn {
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-primary { background: linear-gradient(to right, #6366f1, #60a5fa); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.25); }
+    .btn-secondary { background: rgba(255,255,255,0.6); color: #5a6288; border: 1px solid #e0e7ff; }
+
+    .results { margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+
+    .card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid #e0e7ff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(99,102,241,0.12); }
+
+    .card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #eef2ff, #f0f7ff);
+    }
+
+    .card-content { padding: 1rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .card-content h2 { font-size: 1rem; font-weight: 700; color: #1a2744; margin-bottom: 0.375rem; }
+    .card-content .description { font-size: 0.85rem; color: #5a6288; margin-bottom: 0.75rem; line-height: 1.5; }
+
+    .card-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.78rem; color: #5a6288; }
+    .card-meta .time { display: flex; align-items: center; gap: 0.25rem; }
+
+    .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 0.375rem; margin-bottom: 0.75rem; }
+    .chip { background: #eef2ff; color: #3d5a9e; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-size: 0.72rem; font-weight: 500; }
+
+    .note { color: #5a6288; font-size: 0.8rem; font-style: italic; margin-bottom: 0.5rem; }
+    .recipe-link { color: #3d5a9e; text-decoration: underline; text-decoration-color: rgba(61,90,158,0.25); text-underline-offset: 3px; font-weight: 600; font-size: 0.85rem; margin-top: auto; transition: color 0.15s; }
+    .recipe-link:hover { color: #6d4aae; text-decoration-color: rgba(109,74,174,0.5); }
+
+    .heading-card { background: rgba(255,255,255,0.5); border: 1px solid #e0e7ff; }
+    .heading-card h2 { font-family: 'Newsreader', Georgia, serif; font-weight: 400; font-size: 1.1rem; color: #243b6b; margin-bottom: 0.25rem; }
+    .heading-card p { color: #5a6288; font-size: 0.85rem; }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e0e7ff;
+      font-size: 0.875rem;
+      color: #5a6288;
+    }
+    footer a { color: #3d5a9e; text-decoration: underline; text-decoration-color: rgba(61,90,158,0.25); text-underline-offset: 3px; }
+    footer a:hover { color: #6d4aae; }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="hero">
-      <a href="/">&larr; Back</a>
-      <h1>🍳 Fridge Recipe Helper</h1>
-      <p>Type your fridge ingredients and get recipe ideas. Filter by cuisine, flavor, and dietary preferences.</p>
-    </div>
+    <div class="container">
+      <a href="/" class="back-link">
+        <span class="arrow">&#8592;</span>
+        Back to Tiffany's Personal Website
+      </a>
 
-    <div class="panel">
-      <div class="input-row">
-        <div class="input-group">
-          <label for="ingredientsInput">Enter ingredients (comma or newline separated)</label>
-          <textarea id="ingredientsInput" placeholder="e.g. eggs, milk, spinach&#10;or paste a fridge list"></textarea>
-        </div>
-        <div class="input-group">
-          <label for="imageInput">Or upload a photo of your fridge</label>
-          <input type="file" id="imageInput" accept="image/*" />
-        </div>
-      </div>
+      <header>
+        <h1><span>Fridge Recipe Helper</span></h1>
+        <p>Type your fridge ingredients or upload a photo to get recipe ideas. Filter by cuisine, flavor, and dietary preferences.</p>
+      </header>
 
-      <div class="row">
+      <hr class="site-rule" />
+
+      <section>
+        <h2 class="section-title">Ingredients</h2>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="ingredientsInput">Enter ingredients (comma or newline separated)</label>
+            <textarea id="ingredientsInput" placeholder="e.g. eggs, milk, spinach&#10;or paste a fridge list"></textarea>
+          </div>
+          <div class="input-group">
+            <label for="imageInput">Or upload a photo of your fridge</label>
+            <input type="file" id="imageInput" accept="image/*" />
+          </div>
+        </div>
+      </section>
+
+      <hr class="site-rule" />
+
+      <section>
+        <h2 class="section-title">Filters</h2>
         <div class="filter-section">
           <label class="filter-label">Cuisine</label>
           <div class="filter-buttons" id="cuisineFilters"></div>
@@ -93,76 +255,87 @@
           <label class="filter-label">Dietary</label>
           <div class="filter-buttons" id="dietaryFilters"></div>
         </div>
-      </div>
 
-      <div class="buttons">
-        <button class="primary" id="findBtn">Find recipes</button>
-        <button class="secondary" id="sampleBtn">Use sample fridge</button>
-        <button class="text" id="clearBtn">Clear</button>
-      </div>
+        <div class="buttons">
+          <button class="btn btn-primary" id="findBtn">Find Recipes</button>
+          <button class="btn btn-secondary" id="sampleBtn">Use Sample Fridge</button>
+          <button class="btn btn-secondary" id="clearBtn">Clear</button>
+        </div>
+      </section>
+
+      <hr class="site-rule" />
+
+      <section>
+        <h2 class="section-title">Results</h2>
+        <div class="results" id="results">
+          <div class="card heading-card"><div class="card-content"><p class="note">Enter ingredients above to get recipe suggestions.</p></div></div>
+        </div>
+      </section>
+
+      <footer>
+        <p>Built by <a href="https://itstiffchen.github.io" target="_blank" rel="noreferrer">Tiffany Chen</a>. Recipe data is stored locally in your browser.</p>
+      </footer>
     </div>
-
-    <div class="results" id="results"></div>
   </div>
 
   <script>
     const recipes = [
-      { name: 'Egg Fried Rice', description: 'Classic quick fried rice with scrambled eggs and green onions.', ingredients: ['rice', 'eggs', 'soy sauce', 'garlic', 'green onion'], image: 'https://images.unsplash.com/photo-1603894542802-f3a2f16ab519?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/egg-fried-rice/' },
-      { name: 'Sesame Tofu', description: 'Crispy pan-fried tofu crusted in sesame seeds with sweet sesame sauce.', ingredients: ['tofu', 'sesame seeds', 'soy sauce', 'vinegar', 'sugar'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory', 'sweet'], dietaries: ['healthy'], tutorial: 'https://thewoksoflife.com/sesame-tofu/' },
-      { name: 'Vegetable Omelette', description: 'A quick savory omelette with greens, cheese, and veggies.', ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion'], image: 'https://images.unsplash.com/photo-1587014675280-a60dc4e83cf9?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/24488/' },
-      { name: 'Stir Fry Rice', description: 'Simple fried rice with veggies, eggs, and soy sauce.', ingredients: ['rice', 'eggs', 'broccoli', 'carrot', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1563379091339-ab0ae8a39b7c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/12689/' },
-      { name: 'Pad Thai', description: 'Thai noodle dish with peanut sauce, lime, and fresh veggies.', ingredients: ['rice noodles', 'shrimp', 'eggs', 'peanut butter', 'lime', 'garlic'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['sweet', 'sour'], dietaries: ['pescatarian'], tutorial: 'https://www.allrecipes.com/recipe/86303/' },
-      { name: 'Kung Pao Chicken', description: 'Spicy Sichuan-style chicken with peanuts and dried chilies.', ingredients: ['chicken', 'peanuts', 'soy sauce', 'rice vinegar', 'chili paste', 'garlic'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/kung-pao-chicken/' },
-      { name: 'Miso Soup', description: 'Light Japanese soup with tofu, seaweed, and umami-rich miso.', ingredients: ['miso paste', 'tofu', 'seaweed', 'green onion', 'dashi'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/76566/' },
-      { name: 'Sushi Roll', description: 'Crispy sushi rolls with fresh fish, cucumber, and avocado.', ingredients: ['rice', 'nori', 'salmon', 'cucumber', 'avocado', 'rice vinegar'], image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/25230/' },
-      { name: 'Shrimp Saganaki', description: 'Mediterranean shrimp baked in tomato sauce with feta cheese.', ingredients: ['shrimp', 'tomato', 'feta', 'olive oil', 'garlic', 'oregano'], image: 'https://images.unsplash.com/photo-1599599810694-b5ac4dd4c4d9?w=400&h=300&fit=crop', cuisines: ['Mediterranean'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/215736/' },
-      { name: 'Falafel', description: 'Crispy fried chickpea balls with tahini sauce and pita.', ingredients: ['chickpeas', 'onion', 'garlic', 'cumin', 'parsley', 'flour'], image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop', cuisines: ['Middle Eastern'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/21457/' },
-      { name: 'Ceviche', description: 'Fresh Peruvian raw fish cured in lime juice with vegetables.', ingredients: ['white fish', 'lime', 'cilantro', 'red onion', 'jalapeño', 'corn'], image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop', cuisines: ['Peruvian'], flavors: ['sour'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/65701/' },
-      { name: 'Tacos Al Pastor', description: 'Spanish-style marinated pork tacos with pineapple and onion.', ingredients: ['pork', 'achiote', 'pineapple', 'onion', 'cilantro', 'tortillas'], image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop', cuisines: ['Spanish'], flavors: ['sweet', 'savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/12953/' },
-      { name: 'Mapo Tofu', description: 'Spicy Hunan tofu in numbing and fiery sauce with ground pork.', ingredients: ['tofu', 'ground pork', 'sichuan pepper', 'chili oil', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Hunan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/11787/' },
-      { name: 'Paella', description: 'Spanish rice dish with seafood, saffron, and peppers.', ingredients: ['rice', 'saffron', 'shrimp', 'mussels', 'bell pepper', 'onion'], image: 'https://images.unsplash.com/photo-1505521585397-e51fb1fd56d0?w=400&h=300&fit=crop', cuisines: ['Spanish'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/16923/' },
-      { name: 'Dan Dan Noodles', description: 'Spicy Sichuan noodles with numbing peppercorn and sesame oil.', ingredients: ['noodles', 'minced pork', 'sichuan oil', 'sesame', 'green onion', 'chili'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/dan-dan-noodles/' },
-      { name: 'Coq au Vin', description: 'French braised chicken in red wine with mushrooms and bacon.', ingredients: ['chicken', 'red wine', 'mushrooms', 'pearl onions', 'bacon', 'thyme'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['French'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/13819/' },
-      { name: 'Chow Mein', description: 'Cantonese stir-fried noodles with vegetables and protein.', ingredients: ['noodles', 'cabbage', 'carrot', 'soy sauce', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/chow-mein' },
-      { name: 'Ginger Beef Stir Fry', description: 'Quick stir-fried beef with fresh ginger and soy sauce.', ingredients: ['beef', 'ginger', 'soy sauce', 'garlic', 'vegetables', 'oil'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/ginger-beef/' },
-      { name: 'Black Pepper Chicken', description: 'Crispy chicken stir-fry with black pepper sauce.', ingredients: ['chicken', 'black pepper', 'soy sauce', 'garlic', 'onion', 'oil'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/black-pepper-chicken/' },
-      { name: 'Pork Belly Char Siu', description: 'Tender roast pork belly with sweet char siu glaze.', ingredients: ['pork belly', 'soy sauce', 'honey', 'hoisin', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'savory'], dietaries: ['keto'], tutorial: 'https://thewoksoflife.com/pork-belly-char-siu/' },
-      { name: 'Pork and Chive Dumplings', description: 'Homemade or store-bought dumplings with pork and fresh chives.', ingredients: ['pork', 'chives', 'dumpling wrappers', 'soy sauce', 'vinegar', 'garlic'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Chinese - Jiangsu'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/pork-and-chive-dumplings/' },
-      { name: 'Chicken Congee', description: 'Silky rice porridge with shredded chicken and garnishes.', ingredients: ['rice', 'chicken', 'broth', 'ginger', 'green onion', 'salt'], image: 'https://images.unsplash.com/photo-1585857612519-2a5cd59f2725?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.madewithlau.com/recipes/chicken-congee' },
-      { name: 'Sweet and Sour Pork', description: 'Crispy pork in tangy sweet and sour sauce.', ingredients: ['pork', 'bell pepper', 'pineapple', 'vinegar', 'sugar', 'tomato sauce'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'sour'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/sweet-sour-pork' },
-      { name: 'Hot Pot', description: 'Interactive communal broth with dippable meats and vegetables.', ingredients: ['broth', 'beef', 'tofu', 'mushrooms', 'vegetables', 'dipping sauce'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/ultimate-guide-to-hot-pot' },
-      { name: 'Beef Fried Rice', description: 'Hearty fried rice loaded with beef and vegetables.', ingredients: ['rice', 'beef', 'eggs', 'vegetables', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1603894542802-f3a2f16ab519?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/beef-fried-rice' },
-      { name: 'Wontons', description: 'Delicate hand-folded dumplings in savory broth.', ingredients: ['wonton wrappers', 'ground pork', 'shrimp', 'soy sauce', 'broth', 'green onion'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/wontons' },
-      { name: 'Stir Fried Cauliflower', description: 'Cauliflower in ginger garlic sauce with tomatoes.', ingredients: ['cauliflower', 'tomato', 'ginger', 'garlic', 'soy sauce', 'oil'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/stir-fried-cauliflower-with-tomato-sauce/' },
-      { name: 'Beef and Broccoli', description: 'Classic Chinese takeout-style beef with broccoli.', ingredients: ['beef', 'broccoli', 'soy sauce', 'garlic', 'ginger', 'cornstarch'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/chicken-and-broccoli/' },
-      { name: 'Shrimp Lo Mein', description: 'Noodles with shrimp and vegetables in savory sauce.', ingredients: ['lo mein noodles', 'shrimp', 'vegetables', 'soy sauce', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['pescatarian'], tutorial: 'https://thewoksoflife.com/shrimp-lo-mein/' },
-      { name: 'Egg Drop Soup', description: 'Silky broth with ribbons of cooked egg.', ingredients: ['broth', 'eggs', 'cornstarch', 'green onion', 'soy sauce', 'ginger'], image: 'https://images.unsplash.com/photo-1585857612519-2a5cd59f2725?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/chinese-egg-drop-soup/' },
-      { name: 'Singapore Noodles', description: 'Curried rice noodles with shrimp, pork, and vegetables.', ingredients: ['rice noodles', 'curry powder', 'shrimp', 'pork', 'egg', 'vegetables'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['spicy', 'savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/singapore-noodles/' },
-      { name: 'Peking Duck', description: 'Shandong specialty: crispy duck with plum sauce and pancakes.', ingredients: ['duck', 'plum sauce', 'pancakes', 'cucumber', 'green onion', 'soy sauce'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Shandong'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/25149/' },
-      { name: 'Shrimp Tempura', description: 'Japanese crispy battered shrimp with dipping sauce.', ingredients: ['shrimp', 'flour', 'egg', 'panko', 'oil', 'dashi'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['pescatarian'], tutorial: 'https://www.allrecipes.com/recipe/28202/' },
-      { name: 'Hummus', description: 'Middle Eastern chickpea dip with tahini, lemon, and garlic.', ingredients: ['chickpeas', 'tahini', 'lemon', 'garlic', 'olive oil', 'paprika'], image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop', cuisines: ['Middle Eastern'], flavors: ['savory', 'sour'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/26080/' },
-      { name: 'French Onion Soup', description: 'Rich caramelized onion soup with melted gruyere and crusty bread.', ingredients: ['onion', 'beef broth', 'bread', 'gruyere', 'butter', 'thyme'], image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop', cuisines: ['French'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/21114/' },
-      { name: 'Pasta Primavera', description: 'Bright pasta dish with tomato, zucchini, and parmesan.', ingredients: ['pasta', 'tomato', 'zucchini', 'garlic', 'olive oil', 'parmesan'], image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop', cuisines: ['Italian'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/12380/' },
-      { name: 'Avocado Toast', description: 'Crispy toast topped with mashed avocado and seasonings.', ingredients: ['bread', 'avocado', 'lemon', 'salt', 'pepper'], image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/277396/' },
-      { name: 'Buddha Bowl', description: 'Healthy grain bowl with quinoa, roasted veggies, and tahini.', ingredients: ['quinoa', 'kale', 'chickpeas', 'sweet potato', 'beets', 'tahini'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/280285/' },
-      { name: 'Yogurt Parfait', description: 'Fresh parfait layered with yogurt, berries, and granola.', ingredients: ['yogurt', 'berries', 'granola', 'honey'], image: 'https://images.unsplash.com/photo-1488477181946-85a2bc33eae0?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/228788/' },
-      { name: 'Smoothie Bowl', description: 'Creamy fruit smoothie bowl with spinach or berries.', ingredients: ['banana', 'spinach', 'milk', 'berries', 'peanut butter'], image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/261299/' },
-      { name: 'Pork and Cabbage Stir Fry', description: 'Quick weeknight stir-fry with tender pork and cabbage.', ingredients: ['pork', 'cabbage', 'soy sauce', 'garlic', 'ginger', 'oil'], image: 'https://images.unsplash.com/photo-1585961454277-9a9fd60cfe9f?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/pork-and-cabbage-stir-fry/' },
-      { name: 'Cashew Chicken', description: 'Stir-fried chicken with crispy cashews and vegetables.', ingredients: ['chicken', 'cashews', 'soy sauce', 'garlic', 'bell pepper', 'oil'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/cashew-chicken/' },
-      { name: 'Kung Pao Cauliflower', description: 'Crispy cauliflower in spicy kung pao sauce.', ingredients: ['cauliflower', 'peanuts', 'sichuan pepper', 'chili', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/kung-pao-cauliflower/' },
-      { name: 'Mouthwatering Sichuan Chicken', description: 'Poached chicken in numbing and spicy chili oil.', ingredients: ['chicken', 'sichuan pepper', 'chili oil', 'soy sauce', 'vinegar', 'garlic'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/mouthwatering-sichuan-chicken-in-red-oil-sauce/' },
-      { name: 'Beef Lo Mein', description: 'Silky noodles with tender beef in savory sauce.', ingredients: ['lo mein noodles', 'beef', 'soy sauce', 'garlic', 'vegetables', 'ginger'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/beef-lo-mein/' },
-      { name: 'Sichuan Eggplant', description: 'Soft eggplant in spicy garlic sauce.', ingredients: ['eggplant', 'garlic', 'sichuan pepper', 'chili', 'soy sauce', 'vinegar'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy', 'savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/chinese-eggplant-with-garlic-sauce/' },
-      { name: 'Honey Garlic Shrimp', description: 'Tender shrimp in sweet honey garlic sauce.', ingredients: ['shrimp', 'honey', 'garlic', 'soy sauce', 'ginger', 'oil'], image: 'https://images.unsplash.com/photo-1599599810694-b5ac4dd4c4d9?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['sweet', 'savory'], dietaries: ['pescatarian'], tutorial: 'https://omnivorescookbook.com/honey-garlic-shrimp/' },
-      { name: 'Scallion Pancakes', description: 'Crispy layered pancakes with scallion filling.', ingredients: ['flour', 'water', 'green onion', 'salt', 'oil'], image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop', cuisines: ['Chinese - Jiangsu'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/chinese-scallion-pancakes/' },
-      { name: 'Char Siu Bao', description: 'Steamed sweet barbecue pork buns.', ingredients: ['flour', 'pork belly', 'hoisin', 'honey', 'soy sauce', 'sugar'], image: 'https://images.unsplash.com/photo-1612874742237-415c69bba4e2?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/steamed-char-siu-bao/' },
-      { name: 'Salt and Pepper Shrimp', description: 'Crispy shrimp with aromatic salt and pepper coating.', ingredients: ['shrimp', 'salt', 'pepper', 'garlic', 'green onion', 'oil'], image: 'https://images.unsplash.com/photo-1599599810694-b5ac4dd4c4d9?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['pescatarian', 'keto'], tutorial: 'https://omnivorescookbook.com/salt-and-pepper-shrimp/' },
-      { name: 'Broccoli and Egg Stir Fry', description: 'Simple broccoli with scrambled eggs in savory sauce.', ingredients: ['broccoli', 'eggs', 'soy sauce', 'garlic', 'oil', 'salt'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/broccoli-and-egg-stir-fry/' },
-      { name: 'General Tso Tofu', description: 'Crispy tofu in savory-sweet General Tso sauce.', ingredients: ['tofu', 'soy sauce', 'sugar', 'vinegar', 'garlic', 'chili'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'spicy'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/general-tso-tofu/' },
-      { name: 'Chinese Lemon Chicken', description: 'Crispy chicken in bright lemon glaze.', ingredients: ['chicken', 'lemon', 'sugar', 'soy sauce', 'garlic', 'cornstarch'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'sour'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/chinese-lemon-chicken/' },
-      { name: 'String Bean Chicken', description: 'Crispy green beans with tender chicken and garlic.', ingredients: ['string beans', 'chicken', 'garlic', 'soy sauce', 'oil', 'ginger'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/string-bean-chicken/' },
-      { name: 'Drunken Noodles', description: 'Thai spicy and savory noodle dish with fresh basil.', ingredients: ['rice noodles', 'ground pork', 'chili', 'basil', 'garlic', 'soy sauce'], image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b5?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['spicy', 'savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/drunken-noodles/' },
-      { name: 'Pineapple Buns', description: 'Sweet Hong Kong pastry with pineapple topping.', ingredients: ['flour', 'sugar', 'butter', 'eggs', 'milk', 'pineapple jam'], image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/pineapple-buns/' }
+      { name: 'Egg Fried Rice', description: 'Classic quick fried rice with scrambled eggs and green onions.', time: '15 min', ingredients: ['rice', 'eggs', 'soy sauce', 'garlic', 'green onion'], image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/egg-fried-rice/' },
+      { name: 'Sesame Tofu', description: 'Crispy pan-fried tofu crusted in sesame seeds with sweet sesame sauce.', time: '25 min', ingredients: ['tofu', 'sesame seeds', 'soy sauce', 'vinegar', 'sugar'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory', 'sweet'], dietaries: ['healthy'], tutorial: 'https://thewoksoflife.com/sesame-tofu/' },
+      { name: 'Vegetable Omelette', description: 'A quick savory omelette with greens, cheese, and veggies.', time: '10 min', ingredients: ['eggs', 'milk', 'cheese', 'spinach', 'bell pepper', 'onion'], image: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/24488/' },
+      { name: 'Stir Fry Rice', description: 'Simple fried rice with veggies, eggs, and soy sauce.', time: '20 min', ingredients: ['rice', 'eggs', 'broccoli', 'carrot', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/12689/' },
+      { name: 'Pad Thai', description: 'Thai noodle dish with peanut sauce, lime, and fresh veggies.', time: '30 min', ingredients: ['rice noodles', 'shrimp', 'eggs', 'peanut butter', 'lime', 'garlic'], image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['sweet', 'sour'], dietaries: ['pescatarian'], tutorial: 'https://www.allrecipes.com/recipe/86303/' },
+      { name: 'Kung Pao Chicken', description: 'Spicy Sichuan-style chicken with peanuts and dried chilies.', time: '25 min', ingredients: ['chicken', 'peanuts', 'soy sauce', 'rice vinegar', 'chili paste', 'garlic'], image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/kung-pao-chicken/' },
+      { name: 'Miso Soup', description: 'Light Japanese soup with tofu, seaweed, and umami-rich miso.', time: '10 min', ingredients: ['miso paste', 'tofu', 'seaweed', 'green onion', 'dashi'], image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/76566/' },
+      { name: 'Sushi Roll', description: 'Crispy sushi rolls with fresh fish, cucumber, and avocado.', time: '45 min', ingredients: ['rice', 'nori', 'salmon', 'cucumber', 'avocado', 'rice vinegar'], image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/25230/' },
+      { name: 'Shrimp Saganaki', description: 'Mediterranean shrimp baked in tomato sauce with feta cheese.', time: '30 min', ingredients: ['shrimp', 'tomato', 'feta', 'olive oil', 'garlic', 'oregano'], image: 'https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=400&h=300&fit=crop', cuisines: ['Mediterranean'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/215736/' },
+      { name: 'Falafel', description: 'Crispy fried chickpea balls with tahini sauce and pita.', time: '40 min', ingredients: ['chickpeas', 'onion', 'garlic', 'cumin', 'parsley', 'flour'], image: 'https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?w=400&h=300&fit=crop', cuisines: ['Middle Eastern'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/21457/' },
+      { name: 'Ceviche', description: 'Fresh Peruvian raw fish cured in lime juice with vegetables.', time: '30 min', ingredients: ['white fish', 'lime', 'cilantro', 'red onion', 'jalapeño', 'corn'], image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=400&h=300&fit=crop', cuisines: ['Peruvian'], flavors: ['sour'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/65701/' },
+      { name: 'Tacos Al Pastor', description: 'Marinated pork tacos with pineapple and onion.', time: '45 min', ingredients: ['pork', 'achiote', 'pineapple', 'onion', 'cilantro', 'tortillas'], image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop', cuisines: ['Mexican'], flavors: ['sweet', 'savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/12953/' },
+      { name: 'Mapo Tofu', description: 'Spicy tofu in numbing and fiery sauce with ground pork.', time: '20 min', ingredients: ['tofu', 'ground pork', 'sichuan pepper', 'chili oil', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1582452932307-f2a6d0549a4b?w=400&h=300&fit=crop', cuisines: ['Chinese - Hunan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/11787/' },
+      { name: 'Paella', description: 'Spanish rice dish with seafood, saffron, and peppers.', time: '50 min', ingredients: ['rice', 'saffron', 'shrimp', 'mussels', 'bell pepper', 'onion'], image: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=400&h=300&fit=crop', cuisines: ['Spanish'], flavors: ['savory'], dietaries: ['pescatarian', 'healthy'], tutorial: 'https://www.allrecipes.com/recipe/16923/' },
+      { name: 'Dan Dan Noodles', description: 'Spicy Sichuan noodles with numbing peppercorn and sesame oil.', time: '25 min', ingredients: ['noodles', 'minced pork', 'sichuan oil', 'sesame', 'green onion', 'chili'], image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/dan-dan-noodles/' },
+      { name: 'Coq au Vin', description: 'French braised chicken in red wine with mushrooms and bacon.', time: '1 hr 30 min', ingredients: ['chicken', 'red wine', 'mushrooms', 'pearl onions', 'bacon', 'thyme'], image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop', cuisines: ['French'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/13819/' },
+      { name: 'Chow Mein', description: 'Cantonese stir-fried noodles with vegetables and protein.', time: '20 min', ingredients: ['noodles', 'cabbage', 'carrot', 'soy sauce', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/chow-mein' },
+      { name: 'Ginger Beef Stir Fry', description: 'Quick stir-fried beef with fresh ginger and soy sauce.', time: '20 min', ingredients: ['beef', 'ginger', 'soy sauce', 'garlic', 'vegetables', 'oil'], image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/ginger-beef/' },
+      { name: 'Black Pepper Chicken', description: 'Crispy chicken stir-fry with black pepper sauce.', time: '25 min', ingredients: ['chicken', 'black pepper', 'soy sauce', 'garlic', 'onion', 'oil'], image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/black-pepper-chicken/' },
+      { name: 'Pork Belly Char Siu', description: 'Tender roast pork belly with sweet char siu glaze.', time: '1 hr', ingredients: ['pork belly', 'soy sauce', 'honey', 'hoisin', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'savory'], dietaries: ['keto'], tutorial: 'https://thewoksoflife.com/pork-belly-char-siu/' },
+      { name: 'Pork and Chive Dumplings', description: 'Homemade dumplings with pork and fresh chives.', time: '1 hr', ingredients: ['pork', 'chives', 'dumpling wrappers', 'soy sauce', 'vinegar', 'garlic'], image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop', cuisines: ['Chinese - Jiangsu'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/pork-and-chive-dumplings/' },
+      { name: 'Chicken Congee', description: 'Silky rice porridge with shredded chicken and garnishes.', time: '1 hr', ingredients: ['rice', 'chicken', 'broth', 'ginger', 'green onion', 'salt'], image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.madewithlau.com/recipes/chicken-congee' },
+      { name: 'Sweet and Sour Pork', description: 'Crispy pork in tangy sweet and sour sauce.', time: '35 min', ingredients: ['pork', 'bell pepper', 'pineapple', 'vinegar', 'sugar', 'tomato sauce'], image: 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'sour'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/sweet-sour-pork' },
+      { name: 'Hot Pot', description: 'Interactive communal broth with dippable meats and vegetables.', time: '1 hr', ingredients: ['broth', 'beef', 'tofu', 'mushrooms', 'vegetables', 'dipping sauce'], image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/ultimate-guide-to-hot-pot' },
+      { name: 'Beef Fried Rice', description: 'Hearty fried rice loaded with beef and vegetables.', time: '20 min', ingredients: ['rice', 'beef', 'eggs', 'vegetables', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/beef-fried-rice' },
+      { name: 'Wontons', description: 'Delicate hand-folded dumplings in savory broth.', time: '45 min', ingredients: ['wonton wrappers', 'ground pork', 'shrimp', 'soy sauce', 'broth', 'green onion'], image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.madewithlau.com/recipes/wontons' },
+      { name: 'Stir Fried Cauliflower', description: 'Cauliflower in ginger garlic sauce with tomatoes.', time: '15 min', ingredients: ['cauliflower', 'tomato', 'ginger', 'garlic', 'soy sauce', 'oil'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/stir-fried-cauliflower-with-tomato-sauce/' },
+      { name: 'Beef and Broccoli', description: 'Classic Chinese takeout-style beef with broccoli.', time: '25 min', ingredients: ['beef', 'broccoli', 'soy sauce', 'garlic', 'ginger', 'cornstarch'], image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/chicken-and-broccoli/' },
+      { name: 'Shrimp Lo Mein', description: 'Noodles with shrimp and vegetables in savory sauce.', time: '20 min', ingredients: ['lo mein noodles', 'shrimp', 'vegetables', 'soy sauce', 'garlic', 'ginger'], image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['pescatarian'], tutorial: 'https://thewoksoflife.com/shrimp-lo-mein/' },
+      { name: 'Egg Drop Soup', description: 'Silky broth with ribbons of cooked egg.', time: '10 min', ingredients: ['broth', 'eggs', 'cornstarch', 'green onion', 'soy sauce', 'ginger'], image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/chinese-egg-drop-soup/' },
+      { name: 'Singapore Noodles', description: 'Curried rice noodles with shrimp, pork, and vegetables.', time: '25 min', ingredients: ['rice noodles', 'curry powder', 'shrimp', 'pork', 'egg', 'vegetables'], image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['spicy', 'savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/singapore-noodles/' },
+      { name: 'Peking Duck', description: 'Shandong specialty: crispy duck with plum sauce and pancakes.', time: '2 hr', ingredients: ['duck', 'plum sauce', 'pancakes', 'cucumber', 'green onion', 'soy sauce'], image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop', cuisines: ['Chinese - Shandong'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://www.allrecipes.com/recipe/25149/' },
+      { name: 'Shrimp Tempura', description: 'Japanese crispy battered shrimp with dipping sauce.', time: '30 min', ingredients: ['shrimp', 'flour', 'egg', 'panko', 'oil', 'dashi'], image: 'https://images.unsplash.com/photo-1615361200141-f45040f367be?w=400&h=300&fit=crop', cuisines: ['Japanese'], flavors: ['savory'], dietaries: ['pescatarian'], tutorial: 'https://www.allrecipes.com/recipe/28202/' },
+      { name: 'Hummus', description: 'Middle Eastern chickpea dip with tahini, lemon, and garlic.', time: '10 min', ingredients: ['chickpeas', 'tahini', 'lemon', 'garlic', 'olive oil', 'paprika'], image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?w=400&h=300&fit=crop', cuisines: ['Middle Eastern'], flavors: ['savory', 'sour'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/26080/' },
+      { name: 'French Onion Soup', description: 'Rich caramelized onion soup with melted gruyere and crusty bread.', time: '1 hr', ingredients: ['onion', 'beef broth', 'bread', 'gruyere', 'butter', 'thyme'], image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop', cuisines: ['French'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/21114/' },
+      { name: 'Pasta Primavera', description: 'Bright pasta dish with tomato, zucchini, and parmesan.', time: '25 min', ingredients: ['pasta', 'tomato', 'zucchini', 'garlic', 'olive oil', 'parmesan'], image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop', cuisines: ['Italian'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/12380/' },
+      { name: 'Avocado Toast', description: 'Crispy toast topped with mashed avocado and seasonings.', time: '5 min', ingredients: ['bread', 'avocado', 'lemon', 'salt', 'pepper'], image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/277396/' },
+      { name: 'Buddha Bowl', description: 'Healthy grain bowl with quinoa, roasted veggies, and tahini.', time: '35 min', ingredients: ['quinoa', 'kale', 'chickpeas', 'sweet potato', 'beets', 'tahini'], image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/280285/' },
+      { name: 'Yogurt Parfait', description: 'Fresh parfait layered with yogurt, berries, and granola.', time: '5 min', ingredients: ['yogurt', 'berries', 'granola', 'honey'], image: 'https://images.unsplash.com/photo-1488477181946-85a2bc33eae0?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/228788/' },
+      { name: 'Smoothie Bowl', description: 'Creamy fruit smoothie bowl with spinach or berries.', time: '5 min', ingredients: ['banana', 'spinach', 'milk', 'berries', 'peanut butter'], image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop', cuisines: ['American'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://www.allrecipes.com/recipe/261299/' },
+      { name: 'Pork and Cabbage Stir Fry', description: 'Quick weeknight stir-fry with tender pork and cabbage.', time: '20 min', ingredients: ['pork', 'cabbage', 'soy sauce', 'garlic', 'ginger', 'oil'], image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/pork-and-cabbage-stir-fry/' },
+      { name: 'Cashew Chicken', description: 'Stir-fried chicken with crispy cashews and vegetables.', time: '25 min', ingredients: ['chicken', 'cashews', 'soy sauce', 'garlic', 'bell pepper', 'oil'], image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/cashew-chicken/' },
+      { name: 'Kung Pao Cauliflower', description: 'Crispy cauliflower in spicy kung pao sauce.', time: '30 min', ingredients: ['cauliflower', 'peanuts', 'sichuan pepper', 'chili', 'soy sauce', 'garlic'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/kung-pao-cauliflower/' },
+      { name: 'Mouthwatering Sichuan Chicken', description: 'Poached chicken in numbing and spicy chili oil.', time: '30 min', ingredients: ['chicken', 'sichuan pepper', 'chili oil', 'soy sauce', 'vinegar', 'garlic'], image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/mouthwatering-sichuan-chicken-in-red-oil-sauce/' },
+      { name: 'Beef Lo Mein', description: 'Silky noodles with tender beef in savory sauce.', time: '25 min', ingredients: ['lo mein noodles', 'beef', 'soy sauce', 'garlic', 'vegetables', 'ginger'], image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/beef-lo-mein/' },
+      { name: 'Sichuan Eggplant', description: 'Soft eggplant in spicy garlic sauce.', time: '20 min', ingredients: ['eggplant', 'garlic', 'sichuan pepper', 'chili', 'soy sauce', 'vinegar'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Sichuan'], flavors: ['spicy', 'savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/chinese-eggplant-with-garlic-sauce/' },
+      { name: 'Honey Garlic Shrimp', description: 'Tender shrimp in sweet honey garlic sauce.', time: '15 min', ingredients: ['shrimp', 'honey', 'garlic', 'soy sauce', 'ginger', 'oil'], image: 'https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['sweet', 'savory'], dietaries: ['pescatarian'], tutorial: 'https://omnivorescookbook.com/honey-garlic-shrimp/' },
+      { name: 'Scallion Pancakes', description: 'Crispy layered pancakes with scallion filling.', time: '40 min', ingredients: ['flour', 'water', 'green onion', 'salt', 'oil'], image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop', cuisines: ['Chinese - Jiangsu'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/chinese-scallion-pancakes/' },
+      { name: 'Char Siu Bao', description: 'Steamed sweet barbecue pork buns.', time: '1 hr 30 min', ingredients: ['flour', 'pork belly', 'hoisin', 'honey', 'soy sauce', 'sugar'], image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/steamed-char-siu-bao/' },
+      { name: 'Salt and Pepper Shrimp', description: 'Crispy shrimp with aromatic salt and pepper coating.', time: '20 min', ingredients: ['shrimp', 'salt', 'pepper', 'garlic', 'green onion', 'oil'], image: 'https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['pescatarian', 'keto'], tutorial: 'https://omnivorescookbook.com/salt-and-pepper-shrimp/' },
+      { name: 'Broccoli and Egg Stir Fry', description: 'Simple broccoli with scrambled eggs in savory sauce.', time: '10 min', ingredients: ['broccoli', 'eggs', 'soy sauce', 'garlic', 'oil', 'salt'], image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/broccoli-and-egg-stir-fry/' },
+      { name: 'General Tso Tofu', description: 'Crispy tofu in savory-sweet General Tso sauce.', time: '30 min', ingredients: ['tofu', 'soy sauce', 'sugar', 'vinegar', 'garlic', 'chili'], image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'spicy'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/general-tso-tofu/' },
+      { name: 'Chinese Lemon Chicken', description: 'Crispy chicken in bright lemon glaze.', time: '30 min', ingredients: ['chicken', 'lemon', 'sugar', 'soy sauce', 'garlic', 'cornstarch'], image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet', 'sour'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/chinese-lemon-chicken/' },
+      { name: 'String Bean Chicken', description: 'Crispy green beans with tender chicken and garlic.', time: '20 min', ingredients: ['string beans', 'chicken', 'garlic', 'soy sauce', 'oil', 'ginger'], image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/string-bean-chicken/' },
+      { name: 'Drunken Noodles', description: 'Thai spicy and savory noodle dish with fresh basil.', time: '25 min', ingredients: ['rice noodles', 'ground pork', 'chili', 'basil', 'garlic', 'soy sauce'], image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop', cuisines: ['Asian'], flavors: ['spicy', 'savory'], dietaries: ['keto'], tutorial: 'https://omnivorescookbook.com/drunken-noodles/' },
+      { name: 'Pineapple Buns', description: 'Sweet Hong Kong pastry with pineapple topping.', time: '2 hr', ingredients: ['flour', 'sugar', 'butter', 'eggs', 'milk', 'pineapple jam'], image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop', cuisines: ['Chinese - Cantonese'], flavors: ['sweet'], dietaries: ['healthy'], tutorial: 'https://omnivorescookbook.com/pineapple-buns/' }
     ];
 
     const ingredientInput = document.getElementById('ingredientsInput');
@@ -171,7 +344,7 @@
     const clearBtn = document.getElementById('clearBtn');
     const results = document.getElementById('results');
     const imageInput = document.getElementById('imageInput');
-    
+
     const sampleIngredients = 'eggs, milk, spinach, tomato, cheese, bread, avocado';
     let selectedCuisines = [];
     let selectedFlavors = [];
@@ -189,7 +362,7 @@
     function parseIngredients(text) {
       if (!text || !text.trim()) return [];
       return text
-        .split(/[\n,;]+/)  
+        .split(/[\n,;]+/)
         .map(part => normalizeIngredient(part))
         .filter(Boolean);
     }
@@ -210,20 +383,19 @@
       results.innerHTML = '';
       const available = ingredients.map(normalizeIngredient).filter(Boolean);
       if (!available.length) {
-        results.innerHTML = '<div class="card heading-card"><div style="padding: 20px;"><p class="note">Enter ingredients so the helper can suggest recipes.</p></div></div>';
+        results.innerHTML = '<div class="card heading-card"><div class="card-content"><p class="note">Enter ingredients above to get recipe suggestions.</p></div></div>';
         return;
       }
 
       let matches = recipes.map(recipe => matchRecipe(recipe, available));
-      
-      // Filter by selected categories
+
       matches = matches.filter(item => {
         const passedCuisine = selectedCuisines.length === 0 || item.recipe.cuisines.some(c => selectedCuisines.includes(c));
         const passedFlavor = selectedFlavors.length === 0 || item.recipe.flavors.some(f => selectedFlavors.includes(f));
         const passedDietary = selectedDietaries.length === 0 || item.recipe.dietaries.some(d => selectedDietaries.includes(d));
         return passedCuisine && passedFlavor && passedDietary;
       });
-      
+
       const perfect = matches.filter(item => item.missing.length === 0);
       const partial = matches
         .filter(item => item.missing.length > 0)
@@ -232,18 +404,18 @@
       if (perfect.length) {
         const heading = document.createElement('div');
         heading.className = 'card heading-card';
-        heading.innerHTML = '<div style="padding: 20px;"><h2>Recipes you can make now</h2><p>These recipes match your ingredients.</p></div>';
+        heading.innerHTML = '<div class="card-content"><h2>Recipes you can make now</h2><p>These recipes match your ingredients.</p></div>';
         results.appendChild(heading);
         perfect.forEach(item => results.appendChild(createRecipeCard(item, true)));
       } else if (partial.length) {
         const heading = document.createElement('div');
         heading.className = 'card heading-card';
-        heading.innerHTML = '<div style="padding: 20px;"><h2>Close matches</h2><p>These recipes are close. Add the missing ingredient(s) to complete them.</p></div>';
+        heading.innerHTML = '<div class="card-content"><h2>Close matches</h2><p>These recipes are close. Add the missing ingredient(s) to complete them.</p></div>';
         results.appendChild(heading);
       } else {
         const heading = document.createElement('div');
         heading.className = 'card heading-card';
-        heading.innerHTML = '<div style="padding: 20px;"><p class="note">No recipes match your filters. Try different selections.</p></div>';
+        heading.innerHTML = '<div class="card-content"><p class="note">No recipes match your filters. Try different selections.</p></div>';
         results.appendChild(heading);
         return;
       }
@@ -255,14 +427,16 @@
       const card = document.createElement('article');
       card.className = 'card';
       card.innerHTML = `
-        <img src="${match.recipe.image}" alt="${match.recipe.name}" class="card-image" />
+        <img src="${match.recipe.image}" alt="${match.recipe.name}" class="card-image" loading="lazy" />
         <div class="card-content">
           <h2>${match.recipe.name}</h2>
-          <p>${match.recipe.description}</p>
-          <p><strong>Ingredients:</strong></p>
+          <div class="card-meta">
+            <span class="time"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${match.recipe.time}</span>
+          </div>
+          <p class="description">${match.recipe.description}</p>
           <ul class="chips">${match.recipe.ingredients.map(i => `<li class="chip">${i}</li>`).join('')}</ul>
-          ${exact ? '<p class="note">All required ingredients are available.</p>' : `<p class="note">Missing: ${match.missing.join(', ')}</p>`}
-          <a href="${match.recipe.tutorial}" target="_blank" rel="noopener noreferrer" class="recipe-link">Learn how to make it</a>
+          ${exact ? '<p class="note">All required ingredients available.</p>' : `<p class="note">Missing: ${match.missing.join(', ')}</p>`}
+          <a href="${match.recipe.tutorial}" target="_blank" rel="noopener noreferrer" class="recipe-link">View full recipe &rarr;</a>
         </div>
       `;
       return card;
@@ -320,7 +494,7 @@
     });
     clearBtn.addEventListener('click', () => {
       ingredientInput.value = '';
-      results.innerHTML = '';
+      results.innerHTML = '<div class="card heading-card"><div class="card-content"><p class="note">Enter ingredients above to get recipe suggestions.</p></div></div>';
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       selectedCuisines = [];
       selectedFlavors = [];
