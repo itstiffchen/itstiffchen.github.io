@@ -138,8 +138,7 @@
       return text
         .toLowerCase()
         .replace(/\b(and|or|with|fresh|large|small|cup|cups|slice|slices|a|the)\b/g, ' ')
-        .replace(/[^
-\w\s-]/g, '')
+        .replace(/[^\w\s-]/g, '')
         .replace(/\s+/g, ' ')
         .trim();
     }
