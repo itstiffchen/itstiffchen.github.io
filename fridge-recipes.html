@@ -31,6 +31,52 @@
     .page { padding: 3rem 1.25rem; }
     @media (min-width: 640px) { .page { padding: 4rem 2rem; } }
 
+    .wip-banner {
+      max-width: 56rem;
+      margin: 0 auto 1.75rem;
+      border-radius: 1rem;
+      padding: 1.5rem 1.75rem;
+      background: repeating-linear-gradient(
+        45deg,
+        #fbbf24,
+        #fbbf24 22px,
+        #1a2744 22px,
+        #1a2744 44px
+      );
+      box-shadow: 0 12px 40px -12px rgba(251, 191, 36, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .wip-banner-inner {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(2px);
+    }
+    .wip-banner h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(1.75rem, 5vw, 3rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #1a2744;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .wip-banner h2 .cone { font-size: 1em; }
+    .wip-banner p {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #6b5b95;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
     .container {
       max-width: 56rem;
       margin: 0 auto;
@@ -212,6 +258,13 @@
 </head>
 <body>
   <div class="page">
+    <div class="wip-banner">
+      <div class="wip-banner-inner">
+        <h2><span class="cone">🚧</span> Work in Progress <span class="cone">🚧</span></h2>
+        <p>This project is still under construction — check back soon!</p>
+      </div>
+    </div>
+
     <div class="container">
       <a href="/" class="back-link">
         <span class="arrow">&#8592;</span>
